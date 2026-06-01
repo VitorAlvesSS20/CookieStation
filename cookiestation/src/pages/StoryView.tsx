@@ -21,8 +21,30 @@ const StoryView: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [story, setStory] = useState<any>(null);
-  const [chapters, setChapters] = useState<any[]>([]);
+  type StoryInfo = {
+    id: string;
+    title?: string;
+    synopsis: string;
+    coverUrl?: string;
+    userId?: string;
+    authorName?: string;
+    rating?: string;
+    status?: string;
+    genres?: string[];
+    genre?: string;
+    tags?: string[];
+    views?: number;
+  };
+
+  type StoryChapter = {
+    id: string;
+    title?: string;
+    createdAt?: Date | number | { seconds: number };
+    wordCount?: number;
+  };
+
+  const [story, setStory] = useState<StoryInfo | null>(null);
+  const [chapters, setChapters] = useState<StoryChapter[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,7 +67,7 @@ const StoryView: React.FC = () => {
         const capsSnap = await getDocs(q);
 
         setChapters(
-          capsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+          capsSnap.docs.map((currentDoc) => ({ id: currentDoc.id, ...currentDoc.data() } as StoryChapter)),
         );
       } catch (e) {
         console.error("Erro ao carregar obra:", e);
@@ -257,7 +279,13 @@ const StoryView: React.FC = () => {
                       <span className="cap-title">{cap.title}</span>
                       <span className="cap-date">
                         {new Date(
-                          cap.createdAt?.seconds * 1000,
+                          typeof cap.createdAt === "object" && cap.createdAt !== null && "seconds" in cap.createdAt
+                            ? cap.createdAt.seconds * 1000
+                            : typeof cap.createdAt === "number"
+                              ? cap.createdAt * 1000
+                              : cap.createdAt instanceof Date
+                                ? cap.createdAt.getTime()
+                                : Date.now(),
                         ).toLocaleDateString()}
                       </span>
                     </div>

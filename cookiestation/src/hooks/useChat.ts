@@ -11,13 +11,27 @@ import {
   updateDoc
 } from "firebase/firestore";
 
+type ChatMessage = {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderPhoto: string;
+  text: string;
+  createdAt?: Date | number | { seconds: number };
+};
+
+type ChatUser = {
+  uid: string;
+  displayName?: string;
+  photoURL?: string;
+};
+
 export const useChat = (chatId: string) => {
-  const [messages, setMessages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [loading, setLoading] = useState(!chatId);
 
   useEffect(() => {
     if (!chatId) {
-      setLoading(false);
       return;
     }
 
@@ -28,10 +42,10 @@ export const useChat = (chatId: string) => {
 
     const unsubscribe = onSnapshot(q, 
       (snapshot) => {
-        const docs = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const docs = snapshot.docs.map((document) => ({
+          id: document.id,
+          ...(document.data() as Omit<ChatMessage, 'id'>),
+        })) as ChatMessage[];
         setMessages(docs);
         setLoading(false);
       },
@@ -43,7 +57,7 @@ export const useChat = (chatId: string) => {
     return () => unsubscribe();
   }, [chatId]);
 
-  const sendMessage = async (user: any, text: string) => {
+  const sendMessage = async (user: ChatUser, text: string) => {
     if (!text.trim() || !chatId || !user) return;
 
     const chatRef = doc(db, "chats", chatId);

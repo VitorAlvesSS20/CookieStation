@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# CookieStation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CookieStation é um gerenciador de histórias com foco em criação colaborativa, leitura imersiva e interação entre autores.
 
-Currently, two official plugins are available:
+## O que é
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+CookieStation permite que autores publiquem histórias, criem capítulos, editem conteúdos e conversem com leitores ou outros autores em tempo real.
 
-## React Compiler
+## Principais funcionalidades
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Publicação de histórias com capítulos
+- Editor de histórico com feedback de leitura
+- Página de perfil do autor com obras publicadas
+- Chat entre usuários para interação comunitária
+- Biblioteca de histórias públicas por gênero
+- Temas light/dark e controles de áudio ambiente
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19
+- TypeScript
+- Vite
+- Firebase Authentication
+- Firestore
+- Framer Motion
+- SweetAlert2
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Como usar
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+No diretório `cookiestation`:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Antes de rodar, copie `.env.example` para `.env.local` e preencha com as credenciais do app web do Firebase:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_FIREBASE_API_KEY=sua_api_key
+VITE_FIREBASE_AUTH_DOMAIN=seu-projeto.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=seu-projeto
+VITE_FIREBASE_STORAGE_BUCKET=seu-projeto.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
+VITE_FIREBASE_APP_ID=1:000000000000:web:0000000000000000000000
 ```
+
+Para gerar uma build de produção:
+
+```bash
+npm run build
+```
+
+## Status atual
+
+- Correções aplicadas ao frontend `cookiestation`
+- `npm run lint` passa sem erros
+- `npm run build` conclui com sucesso
+
+## Observações
+
+Certifique-se de configurar o Firebase corretamente em `src/services/firebase.ts` antes de rodar a aplicação.

@@ -14,7 +14,7 @@ import "../styles/createStory.css";
 
 const StoryManage: React.FC = () => {
   const { storyId } = useParams();
-  const [chapters, setChapters] = useState<any[]>([]);
+  const [chapters, setChapters] = useState<{ id: string; title?: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const StoryManage: React.FC = () => {
         );
         const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
         setChapters(docs);
-      } catch (error) {
+      } catch {
         Toast.fire({ icon: "error", title: "Erro ao carregar capítulos." });
       } finally {
         setLoading(false);

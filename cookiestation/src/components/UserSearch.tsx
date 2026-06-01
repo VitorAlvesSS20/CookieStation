@@ -10,11 +10,29 @@ import {
 } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 
-const UserSearch = ({ onSelectChat }: any) => {
+type UserSearchProps = {
+  onSelectChat: (chat: {
+    id: string;
+    recipientId: string;
+    recipientName: string;
+    recipientPhoto: string;
+    lastMessage: string;
+    lastUpdate: number;
+  }) => void;
+};
+
+type SearchResult = {
+  id: string;
+  displayName?: string;
+  username?: string;
+  photoURL?: string;
+};
+
+const UserSearch: React.FC<UserSearchProps> = ({ onSelectChat }) => {
   const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400);
@@ -38,15 +56,15 @@ const UserSearch = ({ onSelectChat }: any) => {
 
       setResults(
         snap.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .filter((u: any) => u.id !== user.uid)
+          .map((d) => ({ id: d.id, ...d.data() } as SearchResult))
+          .filter((u) => u.id !== user.uid)
       );
     };
 
     fetchUsers();
   }, [debouncedSearch, user]);
 
-  const startChat = async (targetUser: any) => {
+  const startChat = async (targetUser: SearchResult) => {
     if (!user) return;
 
     const participants = [user.uid, targetUser.id].sort();
@@ -59,7 +77,7 @@ const UserSearch = ({ onSelectChat }: any) => {
     const existing = await getDocs(q);
 
     let chatId;
-    let recipientName = targetUser.displayName || targetUser.username;
+    const recipientName = targetUser.displayName || targetUser.username || "Escritor";
 
     if (!existing.empty) {
       chatId = existing.docs[0].id;
@@ -84,7 +102,11 @@ const UserSearch = ({ onSelectChat }: any) => {
 
     onSelectChat({
       id: chatId,
-      recipientName: recipientName,
+      recipientId: targetUser.id || "",
+      recipientName,
+      recipientPhoto: targetUser.photoURL || "",
+      lastMessage: "",
+      lastUpdate: Date.now(),
     });
 
     setSearch("");

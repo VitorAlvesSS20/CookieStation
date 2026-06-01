@@ -6,12 +6,26 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+type ChatServiceUser = {
+  uid: string;
+  displayName?: string;
+  photoURL?: string;
+};
+
+type ChatServiceTarget = {
+  id?: string;
+  uid?: string;
+  username?: string;
+  displayName?: string;
+  photoURL?: string;
+};
+
 export const createOrGetChat = async (
-  currentUser: any,
-  targetUser: any
+  currentUser: ChatServiceUser,
+  targetUser: ChatServiceTarget
 ) => {
   const uid1 = currentUser.uid;
-  const uid2 = targetUser.id || targetUser.uid;
+  const uid2 = targetUser.id || targetUser.uid || "";
 
   const chatId = uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
 

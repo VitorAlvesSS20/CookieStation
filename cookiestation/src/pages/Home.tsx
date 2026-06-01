@@ -19,7 +19,7 @@ interface Story {
   coverUrl: string;
   authorName: string;
   userId: string;
-  createdAt: any;
+  createdAt?: Date | number | { seconds: number };
   wordCount: number;
   genres: string[];
   views: number;
@@ -67,7 +67,6 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     const storiesRef = collection(db, "stories");
 
     const q = query(
