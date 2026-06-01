@@ -10,7 +10,14 @@ const ReadingPage: React.FC = () => {
   const navigate = useNavigate();
   const { playSFX } = useGlobalAudio();
 
-  const [chapter, setChapter] = useState<any>(null);
+  type ChapterData = {
+    title?: string;
+    content?: string;
+    chapterCover?: string;
+    createdAt?: Date | number | { seconds: number };
+  } | null;
+
+  const [chapter, setChapter] = useState<ChapterData>(null);
   const [allChapters, setAllChapters] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,7 +100,7 @@ const ReadingPage: React.FC = () => {
           {chapter?.chapterCover && (
             <div className="chapter-visual-wrapper">
               <img
-                src={chapter.chapterCover}
+                src={chapter.chapterCover || ""}
                 alt="Ilustração do Capítulo"
                 className="chapter-main-img"
                 onError={(e) => (e.currentTarget.style.display = "none")}

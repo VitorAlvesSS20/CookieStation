@@ -13,9 +13,19 @@ import {
 } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 
-const ChatWindow = ({ chatId }: any) => {
+type ChatWindowProps = {
+  chatId?: string | null;
+};
+
+type ChatMessage = {
+  id: string;
+  text: string;
+  userId: string;
+};
+
+const ChatWindow = ({ chatId }: ChatWindowProps) => {
   const { user } = useAuth();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
   const [canRead, setCanRead] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -51,10 +61,10 @@ const ChatWindow = ({ chatId }: any) => {
     );
 
     const unsub = onSnapshot(q, (snap) => {
-      const msgs = snap.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }));
+      const msgs = snap.docs.map((document) => ({
+        id: document.id,
+        ...(document.data() as Omit<ChatMessage, 'id'>),
+      })) as ChatMessage[];
       setMessages(msgs);
     }, (error) => {
       console.error(error);
@@ -63,7 +73,7 @@ const ChatWindow = ({ chatId }: any) => {
     return () => unsub();
   }, [chatId, user?.uid]);
 
-  const sendMessage = async (e?: React.FormEvent) => {
+  const sendMessage = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
     if (!text.trim() || !user || !chatId) return;
 
@@ -82,7 +92,7 @@ const ChatWindow = ({ chatId }: any) => {
         lastMessage: currentText,
         lastUpdate: serverTimestamp(),
       });
-    } catch (error) {
+    } catch {
       setText(currentText);
     }
   };

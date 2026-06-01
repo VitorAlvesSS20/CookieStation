@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useCallback, useMemo } from "react";
+import { lazy, Suspense, useState, useCallback, useMemo, type ComponentType } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { AudioProvider, useGlobalAudio, AMBIENCE_TRACKS } from "./context/AudioContext";
@@ -9,11 +9,13 @@ import Sidebar from "./components/Sidebar";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/Footer";
 
-const lazyWithRetry = (componentImport: () => Promise<any>) =>
+type LazyComponentImport = () => Promise<{ default: ComponentType<{}> }>;
+
+const lazyWithRetry = (componentImport: LazyComponentImport) =>
   lazy(async () => {
     try {
       return await componentImport();
-    } catch (error) {
+    } catch {
       window.location.reload();
       return { default: () => null };
     }

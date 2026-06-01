@@ -3,5 +3,5 @@ export interface Story {
   title: string;
   content: string;
   userId: string;
-  createdAt?: any;
+  createdAt?: Date | number | { seconds: number };
 }

@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     
@@ -45,16 +45,17 @@ const Login: React.FC = () => {
       });
       
       navigate("/");
-    } catch (err: any) {
+    } catch (err: unknown) {
       let message = "Ocorreu um erro ao preparar seu acesso. Tente novamente.";
-      
+      const authError = err as { code?: string };
+
       if (
-        err.code === 'auth/user-not-found' ||
-        err.code === 'auth/wrong-password' ||
-        err.code === 'auth/invalid-credential'
+        authError.code === 'auth/user-not-found' ||
+        authError.code === 'auth/wrong-password' ||
+        authError.code === 'auth/invalid-credential'
       ) {
         message = "E-mail ou senha incorretos. Verifique os ingredientes!";
-      } else if (err.code === 'auth/too-many-requests') {
+      } else if (authError.code === 'auth/too-many-requests') {
         message = "Muitas tentativas! Aguarde um pouco para o café esfriar.";
       }
 

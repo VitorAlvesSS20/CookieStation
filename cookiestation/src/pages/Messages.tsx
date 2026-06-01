@@ -65,12 +65,13 @@ const Messages: React.FC = () => {
         const resolvedChats = await Promise.all(chatPromises);
         setChats(resolvedChats.sort((a, b) => b.lastUpdate - a.lastUpdate));
         setLoading(false);
-      } catch (err) {
+      } catch {
         setLoading(false);
       }
-    }, (error) => {
+    }, (error: unknown) => {
       setLoading(false);
-      if (error.code === 'permission-denied') {
+      const firestoreError = error as { code?: string };
+      if (firestoreError.code === 'permission-denied') {
         Toast.fire({ icon: "error", title: "Acesso negado à Estação de Mensagens." });
       }
     });
@@ -78,14 +79,9 @@ const Messages: React.FC = () => {
     return () => unsubscribe();
   }, [user?.uid]);
 
-  useEffect(() => {
-    if (activeChat) {
-      const updatedChat = chats.find(c => c.id === activeChat.id);
-      if (updatedChat && (updatedChat.recipientName !== activeChat.recipientName || updatedChat.recipientPhoto !== activeChat.recipientPhoto)) {
-        setActiveChat(updatedChat);
-      }
-    }
-  }, [chats, activeChat]);
+  const activeChatDetails = activeChat
+    ? chats.find((c) => c.id === activeChat.id) || activeChat
+    : null;
 
   const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation(); 
@@ -101,7 +97,7 @@ const Messages: React.FC = () => {
       await deleteDoc(doc(db, "chats", chatId));
       if (activeChat?.id === chatId) setActiveChat(null);
       Toast.fire({ icon: "success", title: "Conversa removida! ☕" });
-    } catch (error: any) {
+    } catch {
       Toast.fire({ icon: "error", title: "Erro ao remover conversa." });
     }
   };
@@ -111,7 +107,7 @@ const Messages: React.FC = () => {
       <aside className="inbox-sidebar">
         <div className="inbox-header">
           <h2>Comunidade</h2>
-          <UserSearch onSelectChat={(chat: any) => setActiveChat(chat)} />
+          <UserSearch onSelectChat={(chat) => setActiveChat(chat)} />
         </div>
 
         <div className="inbox-list">
@@ -154,20 +150,19 @@ const Messages: React.FC = () => {
       </aside>
 
       <main className="chat-container">
-        {activeChat ? (
+        {activeChatDetails ? (
           <div className="chat-display">
             <header className="chat-header">
               <button className="mobile-back-button" onClick={() => setActiveChat(null)}>
                 Voltar
               </button>
               <div className="chat-user-info">
-                {activeChat.recipientPhoto && <img src={activeChat.recipientPhoto} alt="" />}
-                <h3>{activeChat.recipientName}</h3>
+                {activeChatDetails.recipientPhoto && <img src={activeChatDetails.recipientPhoto} alt="" />}
+                <h3>{activeChatDetails.recipientName}</h3>
               </div>
             </header>
             <ChatWindow 
-              chatId={activeChat.id} 
-              recipientName={activeChat.recipientName} 
+              chatId={activeChatDetails.id} 
             />
           </div>
         ) : (

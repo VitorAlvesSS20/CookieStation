@@ -14,7 +14,7 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -48,12 +48,13 @@ const Register: React.FC = () => {
       });
       
       navigate("/"); 
-    } catch (err: any) {
+    } catch (err: unknown) {
       let message = "Erro ao preparar seu cadastro. Tente novamente.";
-      
-      if (err.code === 'auth/email-already-in-use') {
+      const authError = err as { code?: string };
+
+      if (authError.code === 'auth/email-already-in-use') {
         message = "Este e-mail já está cadastrado em nossa reserva.";
-      } else if (err.code === 'auth/weak-password') {
+      } else if (authError.code === 'auth/weak-password') {
         message = "Senha muito fraca. Tente uma combinação mais encorpada!";
       }
 

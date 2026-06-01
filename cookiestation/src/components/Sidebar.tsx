@@ -31,6 +31,7 @@ const Sidebar: React.FC = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!user?.uid) {
       setLiveUserData(null);
@@ -54,10 +55,13 @@ const Sidebar: React.FC = () => {
 
     return () => unsubscribe();
   }, [user?.uid]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleLogout = async () => {
     const result = await ConfirmDialog(

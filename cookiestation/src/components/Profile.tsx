@@ -22,7 +22,7 @@ const Profile: React.FC = () => {
   const [location, setLocation] = useState("");
   const [authorStatus, setAuthorStatus] = useState("");
   const [writerXP, setWriterXP] = useState(0);
-  const [myBooks, setMyBooks] = useState<any[]>([]);
+  const [myBooks, setMyBooks] = useState<{ id: string; coverUrl?: string; genre?: string; title?: string }[]>([]);
 
   const loadData = useCallback(async () => {
     if (!user?.uid) return;
@@ -47,10 +47,10 @@ const Profile: React.FC = () => {
 
       const q = query(collection(db, "stories"), where("userId", "==", user.uid));
       const snap = await getDocs(q);
-      setMyBooks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setMyBooks(snap.docs.map(d => ({ id: d.id, ...d.data() } as { id: string; coverUrl?: string; genre?: string; title?: string; })));
       
-    } catch (e) {
-      console.error("Erro ao carregar perfil:", e);
+    } catch {
+      console.error("Erro ao carregar perfil");
     } finally {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ const Profile: React.FC = () => {
 
       setIsEditing(false);
       Toast.fire({ icon: 'success', title: 'Perfil atualizado! ✍️' });
-    } catch (error) {
+    } catch {
       Toast.fire({ icon: 'error', title: 'Erro ao salvar alterações.' });
     }
   };
@@ -93,7 +93,7 @@ const Profile: React.FC = () => {
       await batch.commit();
       setMyBooks(prev => prev.filter(b => b.id !== bookId));
       Toast.fire({ icon: 'success', title: 'Obra removida.' });
-    } catch (e) {
+    } catch {
       Toast.fire({ icon: 'error', title: 'Erro ao deletar obra.' });
     }
   };
@@ -114,8 +114,9 @@ const Profile: React.FC = () => {
       await batch.commit();
       await deleteUser(user);
       navigate("/register");
-    } catch (e: any) { 
-      if (e.code === 'auth/requires-recent-login') {
+    } catch (err: unknown) { 
+      const authError = err as { code?: string };
+      if (authError.code === 'auth/requires-recent-login') {
         Toast.fire({ icon: 'warning', title: 'Saia e entre novamente para confirmar a exclusão.' });
       } else {
         Toast.fire({ icon: 'error', title: 'Erro ao excluir conta.' });
