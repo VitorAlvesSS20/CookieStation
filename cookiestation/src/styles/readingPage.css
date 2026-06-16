@@ -102,7 +102,7 @@
   margin-bottom: 2rem;
   line-height: 1.2;
   word-break: break-word;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', serif;
   font-weight: 900;
 }
 
@@ -123,7 +123,7 @@
 }
 
 .article-body p {
-  font-family: 'Georgia', serif;
+  font-family: 'Poppins', serif;
   font-size: clamp(1.15rem, 2.5vw, 1.35rem);
   line-height: 2;
   color: var(--reading-text);

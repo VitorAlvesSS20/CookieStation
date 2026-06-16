@@ -21,8 +21,12 @@ interface Comment {
   text: string;
   userId: string;
   userName: string;
-  userAvatar: string;
-  createdAt: Timestamp;
+  createdAt: Timestamp | null;
+}
+
+interface UserProfile {
+  photoURL?: string;
+  displayName?: string;
 }
 
 interface CommentsProps {
@@ -31,21 +35,30 @@ interface CommentsProps {
 
 const Comments: React.FC<CommentsProps> = ({ storyId }) => {
   const { user } = useAuth();
-  const navigate = useNavigate(); // Corrigido: Declarado o hook
+  const navigate = useNavigate();
   const [comments, setComments] = useState<Comment[]>([]);
+  const [profiles, setProfiles] = useState<Record<string, UserProfile>>({});
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(true);
-  const [currentUserData, setCurrentUserData] = useState<{ photoURL?: string }>(
-    {},
-  );
+  const [currentUserData, setCurrentUserData] = useState<UserProfile>({});
 
+  // Gera o link do avatar padrão baseado no ID
+  const getDefaultAvatar = (uid: string) => 
+    `https://api.dicebear.com/8.x/notionists/svg?seed=${uid}`;
+
+  // 1. Carrega dados atualizados do usuário logado para o formulário
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setCurrentUserData({});
+      return;
+    }
     const fetchUserData = async () => {
       try {
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) setCurrentUserData(userSnap.data());
+        if (userSnap.exists()) {
+          setCurrentUserData(userSnap.data() as UserProfile);
+        }
       } catch (err) {
         console.error("Erro ao carregar dados do usuário:", err);
       }
@@ -53,16 +66,16 @@ const Comments: React.FC<CommentsProps> = ({ storyId }) => {
     fetchUserData();
   }, [user]);
 
+  // 2. Escuta os comentários e gerencia os perfis dos autores dinamicamente
   useEffect(() => {
     if (!storyId) return;
 
-    // Acessando a subcoleção dentro de stories
     const commentsRef = collection(db, "stories", storyId, "comments");
     const q = query(commentsRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(
       q,
-      (snapshot) => {
+      async (snapshot) => {
         const fetchedComments = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -70,16 +83,37 @@ const Comments: React.FC<CommentsProps> = ({ storyId }) => {
 
         setComments(fetchedComments);
         setLoading(false);
+
+        // Identifica IDs únicos de usuários que comentaram para buscar seus perfis atualizados
+        const userIds = Array.from(new Set(fetchedComments.map((c) => c.userId)));
+        
+        userIds.forEach(async (uid) => {
+          // Evita buscar novamente se o perfil já foi carregado nesta sessão
+          if (profiles[uid]) return;
+
+          try {
+            const userSnap = await getDoc(doc(db, "users", uid));
+            if (userSnap.exists()) {
+              setProfiles((prev) => ({
+                ...prev,
+                [uid]: userSnap.data() as UserProfile,
+              }));
+            }
+          } catch (err) {
+            console.error(`Erro ao buscar perfil do usuário ${uid}:`, err);
+          }
+        });
       },
       (error) => {
         console.error("Erro Firebase (Permissões):", error);
         setLoading(false);
-      },
+      }
     );
 
     return () => unsubscribe();
-  }, [storyId]);
+  }, [storyId, profiles]);
 
+  // 3. Envio do comentário simplificado (não armazena mais a imagem dentro do comentário)
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
@@ -90,16 +124,11 @@ const Comments: React.FC<CommentsProps> = ({ storyId }) => {
 
     try {
       const commentsRef = collection(db, "stories", storyId, "comments");
-      const finalAvatar =
-        currentUserData.photoURL ||
-        user.photoURL ||
-        `https://api.dicebear.com/8.x/notionists/svg?seed=${user.uid}`;
-
+      
       await addDoc(commentsRef, {
         text: newComment.trim(),
         userId: user.uid,
-        userName: user.displayName || "Cozinheiro Anônimo",
-        userAvatar: finalAvatar,
+        userName: currentUserData.displayName || user.displayName || "Cozinheiro Anônimo",
         createdAt: serverTimestamp(),
       });
 
@@ -115,10 +144,8 @@ const Comments: React.FC<CommentsProps> = ({ storyId }) => {
     }
   };
 
-  const formAvatar =
-    currentUserData.photoURL ||
-    user?.photoURL ||
-    `https://api.dicebear.com/8.x/notionists/svg?seed=${user?.uid}`;
+  // Avatar dinâmico para a caixa de digitação do formulário
+  const formAvatar = currentUserData.photoURL || user?.photoURL || getDefaultAvatar(user?.uid || "default");
 
   return (
     <div className="comments-section fade-in">
@@ -128,11 +155,11 @@ const Comments: React.FC<CommentsProps> = ({ storyId }) => {
         <form onSubmit={handleSubmitComment} className="comment-form">
           <img
             src={formAvatar}
-            alt="Avatar"
+            alt="Seu Avatar"
             className="comment-avatar"
-            onError={(e) =>
-              (e.currentTarget.src = `https://api.dicebear.com/8.x/notionists/svg?seed=${user.uid}`)
-            }
+            onError={(e) => {
+              e.currentTarget.src = getDefaultAvatar(user.uid);
+            }}
           />
           <div className="form-group">
             <textarea
@@ -167,29 +194,36 @@ const Comments: React.FC<CommentsProps> = ({ storyId }) => {
         <p className="no-comments">Seja o primeiro a comentar!</p>
       ) : (
         <div className="comments-list">
-          {comments.map((comment) => (
-            <div key={comment.id} className="comment-item fade-in">
-              <img
-                src={comment.userAvatar}
-                alt={comment.userName}
-                className="comment-avatar"
-                onError={(e) =>
-                  (e.currentTarget.src = `https://api.dicebear.com/8.x/notionists/svg?seed=${comment.userId}`)
-                }
-              />
-              <div className="comment-content">
-                <div className="comment-header">
-                  <span className="comment-author">{comment.userName}</span>
-                  <span className="comment-date">
-                    {comment.createdAt?.toDate
-                      ? comment.createdAt.toDate().toLocaleDateString()
-                      : "agora"}
-                  </span>
+          {comments.map((comment) => {
+            // Resolve em tempo real os dados atualizados vindos da coleção de usuários
+            const userProfile = profiles[comment.userId];
+            const liveAvatar = userProfile?.photoURL || getDefaultAvatar(comment.userId);
+            const liveName = userProfile?.displayName || comment.userName;
+
+            return (
+              <div key={comment.id} className="comment-item fade-in">
+                <img
+                  src={liveAvatar}
+                  alt={liveName}
+                  className="comment-avatar"
+                  onError={(e) => {
+                    e.currentTarget.src = getDefaultAvatar(comment.userId);
+                  }}
+                />
+                <div className="comment-content">
+                  <div className="comment-header">
+                    <span className="comment-author">{liveName}</span>
+                    <span className="comment-date">
+                      {comment.createdAt?.toDate
+                        ? comment.createdAt.toDate().toLocaleDateString()
+                        : "agora"}
+                    </span>
+                  </div>
+                  <p className="comment-text">{comment.text}</p>
                 </div>
-                <p className="comment-text">{comment.text}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

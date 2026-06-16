@@ -126,7 +126,7 @@
   margin-bottom: 20px;
   outline: none;
   background: transparent;
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", serif;
 }
 
 .label-url {
@@ -217,7 +217,7 @@ select.url-input {
   padding: 25px;
   font-size: clamp(1.1rem, 2vw, 1.25rem);
   line-height: 1.8;
-  font-family: "Georgia", serif;
+  font-family: "Poppins", serif;
   min-height: 300px;
   margin-top: 25px;
   outline: none;
