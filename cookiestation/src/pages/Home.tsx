@@ -26,25 +26,23 @@ interface Story {
   visibility: string;
 }
 
-const GENRES = [
-  "Ação",
-  "Aventura",
-  "Comédia",
-  "Conto",
-  "Drama",
-  "Fantasia",
-  "Ficção Científica",
-  "Mistério",
-  "Romance",
-  "Suspense",
-  "Terror",
-  "Sobrenatural",
-];
+const GENRE_GROUPS = {
+  Populares: ["Ação", "Aventura", "Comédia", "Drama", "Romance", "Suspense"],
+  "Fantasia & Ficção": [
+    "Fantasia",
+    "Ficção Científica",
+    "Sobrenatural",
+    "Terror",
+  ],
+  Narrativos: ["Conto", "Mistério"],
+  Cultural: ["Mitologia", "Histórico", "Folclore", "Religioso", "Filosófico"],
+};
 
 const Home: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const navigate = useNavigate();
   const { playSFX } = useGlobalAudio();
 
@@ -64,6 +62,10 @@ const Home: React.FC = () => {
 
   const clearGenres = () => {
     setSelectedGenres([]);
+  };
+
+  const toggleGroup = (group: string) => {
+    setOpenGroup((prev) => (prev === group ? null : group));
   };
 
   useEffect(() => {
@@ -154,7 +156,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <nav className="genre-nav">
+      <nav className="genre-dropdown">
         <button
           className={`genre-tab ${selectedGenres.length === 0 ? "active" : ""}`}
           onClick={clearGenres}
@@ -162,16 +164,39 @@ const Home: React.FC = () => {
           Todos
         </button>
 
-        {GENRES.map((genre) => (
-          <button
-            key={genre}
-            className={`genre-tab ${
-              selectedGenres.includes(genre) ? "active" : ""
-            }`}
-            onClick={() => toggleGenre(genre)}
-          >
-            {genre}
-          </button>
+        {Object.entries(GENRE_GROUPS).map(([group, genres]) => (
+          <div key={group} className="genre-group">
+            <button
+              className="genre-group-title"
+              onClick={() => toggleGroup(group)}
+            >
+              {group} {openGroup === group ? "▲" : "▼"}
+            </button>
+
+            <AnimatePresence>
+              {openGroup === group && (
+                <motion.div
+                  className="genre-group-content"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {genres.map((genre) => (
+                    <button
+                      key={genre}
+                      className={`genre-tab ${
+                        selectedGenres.includes(genre) ? "active" : ""
+                      }`}
+                      onClick={() => toggleGenre(genre)}
+                    >
+                      {genre}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         ))}
       </nav>
 

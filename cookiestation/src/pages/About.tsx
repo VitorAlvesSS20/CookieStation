@@ -14,68 +14,81 @@ const About: React.FC = () => {
           </button>
           <h1>Sobre o Cookiestation</h1>
           <p className="subtitle">
-            Onde cada parágrafo tem o aroma de um café fresquinho.
+            Um espaço dedicado à escrita, leitura e construção de mundos.
           </p>
         </header>
 
         <main className="static-content">
           <section className="about-hero">
             <p>
-              O <strong>Cookiestation</strong> não é apenas um site de escrita;
-              é uma estação de repouso para mentes criativas. Em um mundo
-              digital cada vez mais apressado, decidimos criar um espaço onde as
-              histórias podem maturar no seu próprio tempo.
+              O <strong>Cookiestation</strong> é uma plataforma desenvolvida para
+              escritores e leitores que valorizam a profundidade da narrativa.
+              Em um ambiente digital cada vez mais acelerado, propomos uma
+              experiência mais contemplativa, onde ideias podem evoluir com
+              clareza, consistência e propósito.
             </p>
           </section>
 
           <section>
-            <h2>Nossa Essência ☕</h2>
+            <h2>Nossa Essência</h2>
             <p>
-              Nascemos da vontade de unir a organização técnica de grandes
-              plataformas. Aqui, o foco é a <strong>narrativa pura</strong>.
-              Queremos que o autor se sinta confortável para rascunhar seus
-              mundos e que o leitor encontre um refúgio livre de distrações.
+              Acreditamos que boas histórias precisam de espaço para crescer.
+              Por isso, o Cookiestation foi projetado com foco na
+              <strong> experiência de escrita</strong> e na
+              <strong> qualidade da leitura</strong>, reduzindo distrações e
+              priorizando o que realmente importa: o conteúdo.
+            </p>
+            <p>
+              Nosso objetivo é oferecer um ambiente equilibrado entre
+              funcionalidade técnica e sensibilidade criativa, permitindo que
+              autores desenvolvam suas ideias com liberdade e que leitores
+              encontrem narrativas envolventes com facilidade.
             </p>
           </section>
 
           <section className="about-features-grid">
             <div className="feature-item">
-              <h3>Escrita Imersiva</h3>
+              <h3>Escrita Focada</h3>
               <p>
-                Ferramentas focadas no que importa: suas palavras e sua
-                criatividade.
+                Ferramentas pensadas para proporcionar fluidez criativa, sem
+                interferências desnecessárias no processo de criação.
               </p>
             </div>
             <div className="feature-item">
-              <h3>Comunidade Acolhedora</h3>
+              <h3>Ambiente Confiável</h3>
               <p>
-                Um ambiente seguro baseado no respeito mútuo e no feedback
-                construtivo.
+                Uma comunidade baseada em respeito, colaboração e incentivo ao
+                desenvolvimento contínuo dos autores.
               </p>
             </div>
             <div className="feature-item">
-              <h3>Estética Moderna</h3>
+              <h3>Design Funcional</h3>
               <p>
-                Um design elegante e de alto contraste, feito para não cansar a
-                vista durante longas leituras.
+                Interface moderna e cuidadosamente construída para oferecer
+                conforto visual e uma experiência consistente em longas sessões
+                de leitura e escrita.
               </p>
             </div>
           </section>
 
           <section>
-            <h2>O Futuro da Estação</h2>
+            <h2>Visão de Futuro</h2>
             <p>
-              O Cookiestation está em constante evolução. O que começou como um
-              gerenciador de histórias está expandindo seus horizontes para se
-              tornar um ecossistema completo para RPGs de texto e narrativas
-              interativas. Nossa estação está sempre aberta para novos
-              passageiros e novas ideias.
+              O Cookiestation está em constante evolução. Nosso propósito é
+              expandir a plataforma para além da escrita tradicional,
+              incorporando recursos voltados a narrativas interativas, RPGs de
+              texto e novas formas de contar histórias.
+            </p>
+            <p>
+              Trabalhamos continuamente para transformar a plataforma em um
+              ecossistema completo para criadores, mantendo sempre o compromisso
+              com qualidade, simplicidade e inovação.
             </p>
           </section>
 
           <div className="static-footer-note about-footer">
-            <p>Sente-se, peça um café e fique à vontade.</p>
-            <span>Feito por Vitor Alves • 2026</span>
+            <p>Fique à vontade para explorar, criar e compartilhar.</p>
+            <span>Desenvolvido por Vitor Alves • 2026</span>
           </div>
         </main>
       </div>

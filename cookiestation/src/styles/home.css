@@ -1,8 +1,8 @@
 .home-container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 20px 100px 20px;
-  background-color: var(--latte-cream);
+  padding: 0 8px 96px;
+  background-color: transparent;
   min-height: 100vh;
   transition: background-color 0.3s ease;
 }
@@ -21,8 +21,8 @@
 .btn-audio-toggle {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  background: var(--cookie-gold);
+  border-radius: 999px;
+  background: var(--espresso-accent);
   color: var(--paper-white);
   display: flex;
   align-items: center;
@@ -30,7 +30,7 @@
   cursor: pointer;
   transition: var(--transition);
   box-shadow: var(--shadow-md);
-  border: 2px solid var(--paper-white);
+  border: 1px solid var(--border-subtle);
   outline: none;
   padding: 0;
 }
@@ -40,9 +40,9 @@
 }
 
 .btn-audio-toggle.playing {
-  background: var(--mocha-dark);
-  color: var(--cookie-gold);
-  border-color: var(--cookie-gold);
+  background: var(--teal-accent);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-audio-toggle:hover {
@@ -69,7 +69,7 @@
   flex-direction: column;
   gap: 6px;
   border: 1px solid var(--border-subtle);
-  min-width: 180px;
+  min-width: 210px;
 }
 
 .music-menu button {
@@ -86,22 +86,23 @@
   width: 100%;
 }
 
-.music-menu button:hover, 
+.music-menu button:hover,
 .music-menu button:focus-visible {
-  background: rgba(212, 163, 115, 0.1);
-  color: var(--cookie-gold);
+  background: color-mix(in srgb, var(--teal-accent) 12%, transparent);
+  color: var(--teal-accent);
   outline: none;
 }
 
 .music-menu button.active {
-  background: var(--mocha-dark);
+  background: var(--espresso-accent);
   color: var(--paper-white);
 }
 
 .hero-banner {
-  height: 520px;
-  border-radius: 40px;
-  margin: 20px 0 60px 0;
+  height: min(520px, calc(100vh - 120px));
+  min-height: 420px;
+  border-radius: var(--radius-lg);
+  margin: 0 0 36px;
   background: var(--mocha-dark) url('/home.jpg') no-repeat center / cover;
   overflow: hidden;
   position: relative;
@@ -111,9 +112,9 @@
 .hero-overlay {
   background: linear-gradient(
     90deg,
-    var(--mocha-dark) 0%,
-    rgba(60, 42, 33, 0.85) 40%,
-    transparent 100%
+    rgba(24, 26, 31, 0.92) 0%,
+    rgba(37, 48, 68, 0.78) 42%,
+    rgba(37, 48, 68, 0.10) 100%
   );
   height: 100%;
   width: 100%;
@@ -124,7 +125,7 @@
 }
 
 .hero-content h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin: 0 0 24px 0;
   line-height: 1.1;
@@ -133,7 +134,7 @@
 }
 
 .hero-content h1 span {
-  color: var(--cookie-gold);
+  color: #f2b96d;
   display: block;
 }
 
@@ -146,18 +147,17 @@
 }
 
 .btn-primary-home {
-  background: var(--cookie-gold);
-  color: var(--paper-white);
-  padding: 18px 48px;
-  border-radius: 100px;
+  background: #ffffff;
+  color: #253044;
+  padding: 16px 34px;
+  border-radius: var(--radius-md);
   font-weight: 800;
   font-size: 1.1rem;
   border: none;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 10px 25px rgba(212, 163, 115, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+  letter-spacing: 0;
 }
 
 .btn-primary-home:hover,
@@ -167,19 +167,50 @@
   outline: none;
 }
 
-.genre-nav {
+.genre-dropdown {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 60px;
-  justify-content: center;
-  flex-wrap: wrap;
+  margin-bottom: 34px;
   padding: 0 10px;
 }
 
+.genre-group {
+  background: var(--paper-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.genre-group-title {
+  width: 100%;
+  padding: 12px 16px;
+  font-weight: 800;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-main);
+  transition: var(--transition);
+}
+
+.genre-group-title:hover {
+  background: color-mix(in srgb, var(--teal-accent) 10%, transparent);
+}
+
+.genre-group-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
 .genre-tab {
-  padding: 10px 22px;
-  border-radius: 999px;
-  border: 2px solid transparent;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
   background: var(--paper-white);
   color: var(--text-muted);
   font-weight: 700;
@@ -191,27 +222,28 @@
 
 .genre-tab:hover,
 .genre-tab:focus-visible {
-  border-color: var(--cookie-gold);
+  border-color: var(--teal-accent);
+  color: var(--teal-accent);
   transform: translateY(-2px);
   outline: none;
 }
 
 .genre-tab.active {
-  background: var(--mocha-dark);
+  background: var(--espresso-accent);
   color: var(--paper-white);
-  border-color: var(--cookie-gold);
-  box-shadow: 0 6px 16px rgba(26, 18, 11, 0.2);
+  border-color: var(--espresso-accent);
+  box-shadow: var(--shadow-sm);
 }
 
 .stories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
 }
 
 .story-card {
   background: var(--paper-white);
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   transition: var(--transition);
   border: 1px solid var(--border-subtle);
@@ -224,13 +256,14 @@
 
 .story-card:hover,
 .story-card:focus-within {
-  transform: translateY(-12px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--cookie-gold);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--teal-accent) 38%, var(--border-subtle));
 }
 
 .card-image-wrapper {
-  height: 380px;
+  aspect-ratio: 4 / 5;
+  height: auto;
   position: relative;
   overflow: hidden;
   background-color: var(--latte-cream);
@@ -251,26 +284,26 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  background: rgba(26, 18, 11, 0.85);
+  background: rgba(37, 48, 68, 0.88);
   backdrop-filter: blur(8px);
-  color: var(--cookie-gold);
-  padding: 8px 18px;
-  border-radius: 100px;
+  color: #ffffff;
+  padding: 7px 12px;
+  border-radius: var(--radius-md);
   font-size: 0.75rem;
   font-weight: 900;
   z-index: 10;
 }
 
 .card-content {
-  padding: 30px;
+  padding: 22px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .card-content h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
   color: var(--espresso-accent);
   margin-bottom: 8px;
 }
@@ -295,6 +328,7 @@
   padding-top: 20px;
   margin-top: auto;
   border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
 }
 
 .skeleton-card {
@@ -302,7 +336,17 @@
   background: linear-gradient(90deg, var(--latte-cream) 25%, var(--input-border) 50%, var(--latte-cream) 75%);
   background-size: 200% 100%;
   animation: loading 1.8s infinite linear;
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 56px 20px;
+  text-align: center;
+  background: var(--paper-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 @keyframes loading {
@@ -311,31 +355,31 @@
 }
 
 @media (max-width: 768px) {
-  .hero-banner { 
-    height: auto; 
-    min-height: 400px; 
-    border-radius: 24px; 
+  .hero-banner {
+    height: auto;
+    min-height: 400px;
+    border-radius: var(--radius-lg);
   }
 
-  .hero-overlay { 
-    padding: 60px 24px; 
-    background: rgba(26, 18, 11, 0.95); 
-    text-align: center; 
-    justify-content: center; 
+  .hero-overlay {
+    padding: 60px 24px;
+    background: rgba(26, 18, 11, 0.95);
+    text-align: center;
+    justify-content: center;
   }
 
-  .stories-grid { 
-    grid-template-columns: 1fr; 
+  .stories-grid {
+    grid-template-columns: 1fr;
   }
 
-  .audio-controls-wrapper { 
-    bottom: 20px; 
-    right: 20px; 
+  .audio-controls-wrapper {
+    bottom: 20px;
+    right: 20px;
   }
 
-  .btn-audio-toggle { 
-    width: 50px; 
-    height: 50px; 
+  .btn-audio-toggle {
+    width: 50px;
+    height: 50px;
   }
 
   .btn-audio-toggle svg {
