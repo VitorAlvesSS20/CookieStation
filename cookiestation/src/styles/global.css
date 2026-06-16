@@ -30,11 +30,10 @@
   --input-border: #3C2A21;
 }
 
-* {
+*, ::before, ::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: var(--font-main) !important; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -47,6 +46,7 @@ html, body {
   color: var(--text-main);
   line-height: 1.6;
   font-size: 16px;
+  font-family: var(--font-main);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -82,6 +82,7 @@ button {
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
   transition: var(--transition);
   border: none;
@@ -101,6 +102,7 @@ button:active:not(:disabled) {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
   filter: grayscale(1);
 }
 
@@ -127,13 +129,12 @@ button:disabled {
   z-index: 100;
   background: var(--paper-white);
   border-right: 1px solid var(--border-subtle);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, width var(--transition);
 }
 
 .content-area {
   flex: 1;
   min-height: 100vh;
-  overflow-y: visible; 
   padding: 40px;
   background-color: var(--latte-cream);
   display: flex;
@@ -173,8 +174,6 @@ input:focus, textarea:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
-  height: 100vh;
   background-color: var(--latte-cream);
   gap: 15px;
   position: fixed;
@@ -219,7 +218,7 @@ input:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
-  .container {
+  .container, .content-area {
     padding: 20px 15px;
   }
 
@@ -230,15 +229,11 @@ input:focus, textarea:focus {
   .sidebar-wrapper {
     width: 100%;
     height: auto;
-    position: sticky;
-    top: 0;
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
   }
 
   .content-area {
-    padding: 20px 15px;
     min-height: calc(100vh - 60px);
-    overflow-y: visible;
   }
 }
