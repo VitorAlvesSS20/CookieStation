@@ -104,7 +104,7 @@ const StoryManage: React.FC = () => {
                 style={{
                   textAlign: "center",
                   color: "#8b7e74",
-                  fontStyle: "italic",
+                  fontStyle: "Poppins, sans-serif",
                 }}
               >
                 Nenhum capítulo encontrado para esta obra.

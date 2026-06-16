@@ -105,7 +105,7 @@
   color: var(--mocha-dark);
   outline: none;
   background: transparent;
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", serif;
 }
 
 .input-field input, 
@@ -222,7 +222,7 @@ select.url-input {
   min-height: 350px;
   resize: vertical;
   line-height: 1.8;
-  font-family: 'Georgia', serif;
+  font-family: 'Poppins', serif;
 }
 
 .detail-actions, .group-btns {

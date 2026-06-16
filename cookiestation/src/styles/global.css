@@ -34,6 +34,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -46,7 +47,6 @@ html, body {
   color: var(--text-main);
   line-height: 1.6;
   font-size: 16px;
-  font-family: var(--font-main);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -82,7 +82,6 @@ button {
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 1rem;
-  font-family: inherit;
   cursor: pointer;
   transition: var(--transition);
   border: none;
@@ -151,7 +150,7 @@ img {
   border-radius: var(--radius-md);
 }
 
-input, textarea {
+input, textarea, select {
   width: 100%;
   max-width: 100%;
   outline: none;
@@ -161,10 +160,9 @@ input, textarea {
   background: var(--paper-white);
   color: var(--text-main);
   transition: var(--transition);
-  font-family: inherit;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
   border-color: var(--cookie-gold);
   box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
 }

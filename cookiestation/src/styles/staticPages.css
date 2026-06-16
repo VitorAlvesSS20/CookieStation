@@ -52,7 +52,7 @@
 }
 
 .static-header h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
   color: var(--mocha-deep);
   margin-top: 25px;
@@ -79,7 +79,7 @@
 }
 
 .static-content h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', serif;
   color: var(--cookie-gold);
   font-size: 1.8rem;
   margin-bottom: 20px;
@@ -89,7 +89,7 @@
 }
 
 .static-content p {
-  font-family: 'Georgia', serif;
+  font-family: 'Poppins', serif;
   line-height: 1.9;
   color: var(--text-main);
   font-size: 1.15rem;
@@ -103,7 +103,7 @@
 }
 
 .static-list li {
-  font-family: 'Georgia', serif;
+  font-family: 'Poppins', serif;
   font-size: 1.1rem;
   padding: 15px 20px;
   background: var(--latte-cream);
