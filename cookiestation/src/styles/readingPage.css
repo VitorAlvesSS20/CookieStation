@@ -50,8 +50,7 @@
 .reading-fixed-nav {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   height: 70px;
   background: var(--reading-nav-bg);
   backdrop-filter: blur(10px);
@@ -59,7 +58,7 @@
   display: flex;
   align-items: center;
   z-index: 1000;
-  padding: 0 20px;
+  padding-inline: 20px;
 }
 
 .nav-content {
@@ -171,6 +170,7 @@
 .nav-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+  pointer-events: none;
   border-color: var(--reading-muted);
   color: var(--reading-muted);
 }
@@ -195,34 +195,42 @@
   .reading-page-layout {
     padding-top: 70px;
   }
+
   .reading-fixed-nav {
     height: 65px;
   }
+
   .reading-container {
-    padding: 0 20px 60px 20px;
+    padding-bottom: 60px;
   }
+
   .article-body p {
     text-align: left;
     line-height: 1.8;
   }
+
   .chapter-visual-wrapper {
     margin-bottom: 2rem;
     border-radius: 16px;
   }
+
   .chapter-main-img {
     max-height: 380px;
   }
+
   .reading-footer {
     flex-direction: column-reverse;
     align-items: stretch;
     margin-top: 50px;
     padding-top: 30px;
   }
+
   .nav-btn {
     width: 100%;
     text-align: center;
     padding: 16px;
   }
+
   .btn-finish-reading {
     text-align: center;
     margin-bottom: 10px;

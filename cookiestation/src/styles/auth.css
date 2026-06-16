@@ -24,8 +24,7 @@
 
 .auth-visual {
   flex: 1;
-  background: linear-gradient(45deg, rgba(24, 26, 31, 0.88), rgba(47, 129, 117, 0.48)),
-              url('/login.jpg');
+  background: linear-gradient(45deg, rgba(24, 26, 31, 0.88), rgba(47, 129, 117, 0.48)), url('/login.jpg');
   background-size: cover;
   background-position: center;
   background-blend-mode: overlay;
@@ -36,8 +35,7 @@
 }
 
 .register-visual {
-  background: linear-gradient(45deg, rgba(24, 26, 31, 0.88), rgba(159, 64, 92, 0.46)),
-              url('/register.jpg');
+  background: linear-gradient(45deg, rgba(24, 26, 31, 0.88), rgba(159, 64, 92, 0.46)), url('/register.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -65,15 +63,18 @@
   margin-bottom: 8px;
 }
 
-.auth-form {
+.auth-form,
+.input-group,
+.input-group-row {
   display: flex;
   flex-direction: column;
+}
+
+.auth-form {
   gap: 16px; 
 }
 
 .input-group {
-  display: flex;
-  flex-direction: column;
   gap: 8px;
 }
 
@@ -93,7 +94,7 @@
 }
 
 .input-group-row {
-  display: flex;
+  flex-direction: row;
   gap: 15px;
 }
 

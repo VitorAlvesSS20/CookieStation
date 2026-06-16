@@ -41,8 +41,7 @@
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  inset-inline: 0;
   height: 6px;
   background: linear-gradient(90deg, var(--cookie-gold), var(--mocha-deep));
 }
@@ -100,7 +99,7 @@
 .static-list {
   list-style: none;
   padding: 0;
-  margin: 25px 0;
+  margin-block: 25px;
 }
 
 .static-list li {
@@ -110,12 +109,10 @@
   background: var(--latte-cream);
   border-radius: 12px;
   margin-bottom: 12px;
+  border: 1px solid var(--border-light);
   border-left: 3px solid var(--cookie-gold);
   color: var(--text-main);
   transition: var(--transition);
-  border-top: 1px solid var(--border-light);
-  border-right: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
 }
 
 .static-list li:hover {
@@ -128,7 +125,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 25px;
-  margin: 40px 0;
+  margin-block: 40px;
 }
 
 .feature-item {
