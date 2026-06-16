@@ -23,7 +23,7 @@ class StoryBase(BaseModel):
     genre: str = "Geral"
     coverUrl: Optional[str] = None
     status: str = "writing"
-    tags: List[str] = []
+    tags: List[str] = Field(default_factory=list)
 
 class StoryCreate(StoryBase):
     pass

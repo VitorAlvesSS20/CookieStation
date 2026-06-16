@@ -7,20 +7,48 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-cred_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH")
-if not firebase_admin._apps:
+def _initialize_firebase():
+    if firebase_admin._apps:
+        return
+
+    cred_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH")
+    if not cred_path:
+        raise RuntimeError(
+            "FIREBASE_SERVICE_ACCOUNT_PATH não foi definido. "
+            "Configure essa variável apontando para o JSON da service account do Firebase."
+        )
+
+    if not os.path.exists(cred_path):
+        raise RuntimeError(
+            f"Arquivo da service account do Firebase não encontrado: {cred_path}"
+        )
+
     cred = credentials.Certificate(cred_path)
     firebase_admin.initialize_app(cred)
 
-db = firestore.client()
+
+def get_firestore_client():
+    _initialize_firebase()
+    return firestore.client()
+
+
+class FirestoreClientProxy:
+    def __getattr__(self, name):
+        return getattr(get_firestore_client(), name)
+
+
+db = FirestoreClientProxy()
 security = HTTPBearer()
 
 async def get_current_user(res: HTTPAuthorizationCredentials = Security(security)):
     try:
+        _initialize_firebase()
         decoded_token = auth.verify_id_token(res.credentials)
         return decoded_token
-    except:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token inválido")
 
 async def get_user_data(user=Depends(get_current_user)):
     user_ref = db.collection('users').document(user['uid']).get()
